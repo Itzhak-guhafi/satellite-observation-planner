@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+# Starlette suggests a different HTTP client for TestClient; httpx still works and is the documented FastAPI choice.
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient` is deprecated"]

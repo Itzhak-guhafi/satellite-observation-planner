@@ -1,0 +1,104 @@
+:root {
+  color-scheme: dark;
+  --bg: #0f141b;
+  --panel: #161c25;
+  --surface: #1e2631;
+  --text: #e6eaf0;
+  --muted: #8b95a5;
+  --border: #2a3340;
+  --accent: #3b82f6;
+  --ok: #22c55e;
+  --bad: #f87171;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+.layout { display: flex; height: 100vh; }
+.loading { padding: 2rem; }
+
+.panel {
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+.panel h1 { font-size: 1.15rem; margin: 0; }
+.panel h2 { font-size: 0.95rem; margin: 0 0 0.4rem; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+button {
+  font: inherit;
+  padding: 0.45rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  white-space: nowrap;
+  cursor: pointer;
+}
+button:not(:disabled):hover { border-color: var(--muted); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.status { margin: 0; display: flex; align-items: center; gap: 0.35rem; font-weight: 600; }
+.status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+.status-running .status-dot { background: var(--accent); animation: pulse 1s infinite; }
+.status-completed .status-dot { background: var(--ok); }
+.status-failed .status-dot { background: var(--bad); }
+@keyframes pulse { 50% { opacity: 0.3; } }
+.error { margin: 0; color: var(--bad); }
+.muted { color: var(--muted); font-weight: 400; }
+
+.counts { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.counts th { text-align: left; font-weight: 500; color: var(--muted); border-bottom: 1px solid var(--border); padding: 0.3rem 0; }
+.counts td { padding: 0.3rem 0; border-bottom: 1px solid var(--border); }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.counts th:not(:first-child) { text-align: right; }
+.strong { font-weight: 700; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; }
+
+.schedule { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.schedule ol { margin: 0; padding: 0; list-style: none; overflow-y: auto; font-size: 0.85rem; }
+.schedule li { display: flex; align-items: center; gap: 0.4rem; padding: 0.15rem 0; }
+.time { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+.map-wrapper { position: relative; flex: 1; }
+.map { height: 100%; width: 100%; background: var(--bg); }
+/* OSM has no dark tile set without an API key, so the light tiles are inverted. Markers live in another pane. */
+.map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.85) saturate(0.6); }
+.map .leaflet-bar a { background: var(--surface); color: var(--text); border-color: var(--border); }
+.map .leaflet-bar a.leaflet-disabled { background: var(--panel); color: var(--muted); }
+.map .leaflet-control-attribution { background: rgb(22 28 37 / 0.8); color: var(--muted); }
+.map .leaflet-control-attribution a { color: var(--text); }
+.map .leaflet-tooltip { background: var(--surface); color: var(--text); border-color: var(--border); }
+.map .leaflet-tooltip-left::before { border-left-color: var(--surface); }
+.map .leaflet-tooltip-right::before { border-right-color: var(--surface); }
+.fit-button { position: absolute; top: 10px; right: 10px; z-index: 1000; box-shadow: 0 1px 4px rgb(0 0 0 / 0.4); }
+.legend {
+  position: absolute;
+  bottom: 24px;
+  left: 10px;
+  z-index: 1000;
+  background: rgb(22 28 37 / 0.92);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+}
+.legend-row { display: flex; align-items: center; gap: 0.4rem; }
+
+@media (max-width: 720px) {
+  .layout { flex-direction: column; height: auto; }
+  .panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+  .map-wrapper { flex: none; height: 70vh; }
+  .schedule ol { max-height: 30vh; }
+}
